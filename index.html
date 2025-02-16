@@ -1,329 +1,410 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Simple Dorking Tool</title>
-  <style>
-    /* Base Styles & Dark Mode Defaults */
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #121212;
-      color: #e0e0e0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .container {
-      background: #1e1e1e;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-      min-width: 600px;
-      text-align: center;
-    }
-    input[type="text"] {
-      width: 80%;
-      padding: 12px;
-      margin: 20px 0;
-      border: 1px solid #555;
-      border-radius: 4px;
-      font-size: 16px;
-      background: #333;
-      color: #e0e0e0;
-    }
-    button {
-      margin: 5px;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-size: 16px;
-    }
-    .main-search-button {
-      background-color: #34a853;
-      color: white;
-    }
-    /* Toggle Switch Styling */
-    .toggle-switch {
-      position: relative;
-      display: inline-block;
-      width: 60px;
-      height: 34px;
-      margin: 0 10px;
-      vertical-align: middle;
-    }
-    .toggle-switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #ccc;
-      transition: 0.4s;
-      border-radius: 34px;
-    }
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 26px;
-      width: 26px;
-      left: 4px;
-      bottom: 4px;
-      background-color: white;
-      transition: 0.4s;
-      border-radius: 50%;
-    }
-    .toggle-switch input:checked + .slider {
-      background-color: #2196F3;
-    }
-    .toggle-switch input:checked + .slider:before {
-      transform: translateX(26px);
-    }
-    /* Label Styling */
-    .engine-label {
-      margin-right: 10px;
-      font-size: 14px;
-      vertical-align: middle;
-    }
-    .dark-mode-toggle {
-      margin-bottom: 20px;
-    }
-    /* Dork Buttons Styling */
-    .dork-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-      margin: 20px 0;
-    }
-    .dork-button {
-      background-color: #fbbc05;
-      color: black;
-      border: none;
-      border-radius: 4px;
-      padding: 8px 16px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      font-size: 14px;
-    }
-    .dork-button.active {
-      background-color: #f9ab00;
-    }
-    /* Tooltip Styling */
-    .dork-button-container {
-      position: relative;
-      display: inline-block;
-    }
-    .tooltip-text {
-      visibility: hidden;
-      width: 200px;
-      background-color: #333;
-      color: #fff;
-      text-align: center;
-      border-radius: 6px;
-      padding: 5px;
-      position: absolute;
-      z-index: 1;
-      bottom: 125%;
-      left: 50%;
-      margin-left: -100px;
-      opacity: 0;
-      transition: opacity 0.3s ease-in-out;
-      pointer-events: none;
-    }
-    .dork-button-container:hover .tooltip-text {
-      visibility: visible;
-      opacity: 1;
-      transition-delay: 0.5s;
-    }
-    .tooltip-text::after {
-      content: "";
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      margin-left: -5px;
-      border-width: 5px;
-      border-style: solid;
-      border-color: #333 transparent transparent transparent;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Dorking Tool</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+
+        .light-mode {
+            background-color: #fff;
+            color: #000;
+        }
+
+        .container {
+            background: rgba(30, 30, 30, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            min-width: 600px;
+            text-align: center;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 12px;
+            margin: 20px 0;
+            border: 1px solid #555;
+            border-radius: 4px;
+            font-size: 16px;
+            background: #333;
+            color: #e0e0e0;
+        }
+
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .main-search-button {
+            background-color: #34a853;
+            color: white;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+            margin: 0 10px;
+            vertical-align: middle;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        .toggle-switch input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        .toggle-switch input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .engine-label {
+            margin-right: 10px;
+            font-size: 14px;
+            vertical-align: middle;
+        }
+
+        .dark-mode-toggle {
+            margin-bottom: 20px;
+        }
+
+        .dork-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .dork-button {
+            background-color: #fbbc05;
+            color: black;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 14px;
+        }
+
+        .dork-button.active {
+            background-color: #f9ab00;
+        }
+
+        .dork-button-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            pointer-events: none;
+        }
+
+        .dork-button-container:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+            transition-delay: 0.5s;
+        }
+
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #333 transparent transparent transparent;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            display: none;
+        }
+
+        .matrix-on canvas {
+            display: block;
+        }
+
+        .glitched-text {
+            font-family: 'Courier New', Courier, monospace;
+            animation: glitch 1.5s infinite;
+        }
+
+        @keyframes glitch {
+            0% {
+                text-shadow: -1px -1px 1px #0F0, 1px 1px 1px #0F0;
+            }
+            25% {
+                text-shadow: -2px -2px 2px #0F0, 2px 2px 2px #0F0;
+            }
+            50% {
+                text-shadow: -3px -3px 3px #0F0, 3px 3px 3px #0F0;
+            }
+            75% {
+                text-shadow: -1px 1px 2px #0F0, 1px -1px 2px #0F0;
+            }
+            100% {
+                text-shadow: -1px -1px 1px #0F0, 1px 1px 1px #0F0;
+            }
+        }
+    </style>
 </head>
-<body>
-  <div id="root"></div>
-  
-  <!-- React & Babel Scripts -->
-  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
-  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-  
-  <!-- React Component -->
-  <script type="text/babel">
-    // Mapping for formatted command text
-    const formattedCommands = {
-      site: "Site",
-      filetype: "File Type",
-      inurl: "In URL",
-      intitle: "In Title",
-      intext: "In Text",
-      contains: "Contains",
-      language: "Language",
-      loc: "Location",
-      url: "URL",
-      title: "Title",
-      link: "Link",
-      domain: "Domain"
-    };
-
-    // Descriptions for each command tooltip
-    const commandDescriptions = {
-      site: "Restrict search results to a specific site.",
-      filetype: "Search for files of a specific type.",
-      inurl: "Find pages with specific text in the URL.",
-      intitle: "Search for pages with the text in the title.",
-      intext: "Look for pages with the text in the body.",
-      contains: "Bing: Search for pages containing specific text.",
-      language: "Bing: Filter results by language.",
-      loc: "Bing: Find results from a specific location.",
-      url: "Yahoo: Search within URLs.",
-      title: "Yahoo: Search within page titles.",
-      link: "Yahoo: Find pages linking to a URL.",
-      domain: "Yahoo: Filter search by domain."
-    };
-
-    class DorkingTool extends React.Component {
-      constructor(props) {
-        super(props);
-        this.state = {
-          darkMode: true,
-          searchEngine: '',
-          searchTerm: '',
-          dorkCommand: '',
-          engines: {
-            'g': { name: 'Google', commands: ['site', 'filetype', 'inurl', 'intitle', 'intext'] },
-            'b': { name: 'Bing', commands: ['site', 'contains', 'language', 'loc'] },
-            'y': { name: 'Yahoo', commands: ['url', 'title', 'link', 'domain'] },
-            '': { name: 'DuckDuckGo', commands: ['site', 'filetype', 'intitle', 'inurl'] }
-          }
+<body class="dark-mode">
+    <div id="root"></div>
+    <canvas id="matrixCanvas"></canvas>
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script type="text/babel">
+        const formattedCommands = {
+            site: "Site",
+            filetype: "File Type",
+            inurl: "In URL",
+            intitle: "In Title",
+            intext: "In Text",
+            contains: "Contains",
+            language: "Language",
+            loc: "Location",
+            url: "URL",
+            title: "Title",
+            link: "Link",
+            domain: "Domain"
         };
-      }
-      
-      toggleDarkMode = () => {
-        this.setState({ darkMode: !this.state.darkMode });
-      }
-      
-      handleSearchEngineToggle = (engine) => {
-        this.setState(prevState => ({
-          searchEngine: prevState.searchEngine === engine ? '' : engine,
-          dorkCommand: ''
-        }));
-      }
-      
-      handleSearchTermChange = (event) => {
-        this.setState({ searchTerm: event.target.value });
-      }
-      
-      buildQuery = (command) => {
-        const { searchTerm } = this.state;
-        if (command) {
-          return `${command}:"${searchTerm}"`;
-        }
-        return `"${searchTerm}"`;
-      }
-      
-      runSearch = (commandOverride) => {
-        const { searchEngine, dorkCommand } = this.state;
-        const command = commandOverride !== undefined ? commandOverride : dorkCommand;
-        let query = this.buildQuery(command);
-        if (searchEngine) {
-          query = `!${searchEngine} ${query}`;
-        }
-        window.open(`https://duckduckgo.com/?q=${encodeURIComponent(query)}`, '_blank');
-      }
-      
-      handleSubmit = (event) => {
-        event.preventDefault();
-        this.runSearch();
-      }
-      
-      handleDorkButtonClick = (command) => {
-        this.setState({ dorkCommand: command }, () => {
-          this.runSearch(command);
-        });
-      }
-      
-      render() {
-        const { darkMode, searchEngine, searchTerm, dorkCommand, engines } = this.state;
-        const currentEngine = engines[searchEngine] || engines[''];
-        
-        return (
-          <div className={`container ${darkMode ? 'dark-mode' : ''}`}>
-            <div className="dark-mode-toggle">
-              <label className="engine-label">Dark Mode:</label>
-              <label className="toggle-switch">
-                <input type="checkbox" checked={darkMode} onChange={this.toggleDarkMode} />
-                <span className="slider"></span>
-              </label>
-            </div>
-            <h1>Simple Dorking Tool</h1>
-            <div className="engine-toggles">
-              {Object.entries(engines).map(([key, engine]) => {
-                if (key === '') return null;
+
+        const commandDescriptions = {
+            site: "Restrict search results to a specific site.",
+            filetype: "Search for files of a specific type.",
+            inurl: "Find pages with specific text in the URL.",
+            intitle: "Search for pages with the text in the title.",
+            intext: "Look for pages with the text in the body.",
+            contains: "Bing: Search for pages containing specific text.",
+            language: "Bing: Filter results by language.",
+            loc: "Bing: Find results from a specific location.",
+            url: "Yahoo: Search within URLs.",
+            title: "Yahoo: Search within page titles.",
+            link: "Yahoo: Find pages linking to a URL.",
+            domain: "Yahoo: Filter search by domain."
+        };
+
+        class DorkingTool extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    darkMode: true,
+                    searchEngine: '',
+                    searchTerm: '',
+                    dorkCommand: '',
+                    engines: {
+                        'g': { name: 'Google', commands: ['site', 'filetype', 'inurl', 'intitle', 'intext'] },
+                        'b': { name: 'Bing', commands: ['site', 'contains', 'language', 'loc'] },
+                        'y': { name: 'Yahoo', commands: ['url', 'title', 'link', 'domain'] },
+                        '': { name: 'DuckDuckGo', commands: ['site', 'filetype', 'intitle', 'inurl'] }
+                    }
+                };
+            }
+
+            toggleDarkMode = () => {
+                this.setState(prevState => {
+                    const newDarkMode = !prevState.darkMode;
+                    document.body.classList.remove('light-mode', 'matrix-on');
+                    document.body.classList.add(newDarkMode ? 'dark-mode' : 'light-mode');
+                    if (!newDarkMode) {
+                        document.body.classList.add('matrix-on');
+                    }
+                    return { darkMode: newDarkMode };
+                });
+            }
+
+            handleSearchEngineToggle = (engine) => {
+                this.setState(prevState => ({ searchEngine: prevState.searchEngine === engine ? '' : engine, dorkCommand: '' }));
+            }
+
+            handleSearchTermChange = (event) => {
+                this.setState({ searchTerm: event.target.value });
+            }
+
+            buildQuery = (command) => {
+                const { searchTerm } = this.state;
+                return command ? `${command}:"${searchTerm}"` : `"${searchTerm}"`;
+            }
+
+            runSearch = (commandOverride) => {
+                const { searchEngine, dorkCommand } = this.state;
+                const command = commandOverride !== undefined ? commandOverride : dorkCommand;
+                let query = this.buildQuery(command);
+                if (searchEngine) query = `!${searchEngine} ${query}`;
+                window.open(`https://duckduckgo.com/?q=${encodeURIComponent(query)}`, '_blank');
+            }
+
+            handleSubmit = (event) => {
+                event.preventDefault();
+                this.runSearch();
+            }
+
+            handleDorkButtonClick = (command) => {
+                this.setState({ dorkCommand: command }, () => this.runSearch(command));
+            }
+
+            render() {
+                const { darkMode, searchEngine, searchTerm, dorkCommand, engines } = this.state;
+                const currentEngine = engines[searchEngine] || engines[''];
+                const modeToggleText = darkMode ? 'Dark Mode' : 'Hacker Boy Mode';
+                const modeToggleClass = darkMode ? '' : 'glitched-text';
+                const buttonClass = darkMode ? '' : 'glitched-text';
+
                 return (
-                  <span key={key}>
-                    <label className="engine-label">{engine.name}</label>
-                    <label className="toggle-switch">
-                      <input
-                        type="checkbox"
-                        checked={searchEngine === key}
-                        onChange={() => this.handleSearchEngineToggle(key)}
-                      />
-                      <span className="slider"></span>
-                    </label>
-                  </span>
+                    <div className="container">
+                        <div className="dark-mode-toggle">
+                            <label className="engine-label">
+                                <span className={modeToggleClass}>{modeToggleText}</span>:
+                            </label>
+                            <label className="toggle-switch">
+                                <input type="checkbox" checked={darkMode} onChange={this.toggleDarkMode} />
+                                <span className="slider"></span>
+                            </label>
+                        </div>
+                        <h1 className={buttonClass}>Simple Dorking Tool</h1>
+                        <div className="engine-toggles">
+                            {Object.entries(engines).map(([key, engine]) => {
+                                if (key === '') return null;
+                                return (
+                                    <span key={key}>
+                                        <label className="engine-label">{engine.name}</label>
+                                        <label className="toggle-switch">
+                                            <input type="checkbox" checked={searchEngine === key} onChange={() => this.handleSearchEngineToggle(key)} />
+                                            <span className="slider"></span>
+                                        </label>
+                                    </span>
+                                );
+                            })}
+                        </div>
+                        <form onSubmit={this.handleSubmit}>
+                            <input type="text" value={searchTerm} onChange={this.handleSearchTermChange} placeholder="Enter search term..." />
+                            <div className="dork-buttons">
+                                {currentEngine.commands.map((command) => (
+                                    <div className="dork-button-container" key={command}>
+                                        <button type="button" className={`dork-button ${dorkCommand === command ? 'active' : ''} ${buttonClass}`} onClick={() => this.handleDorkButtonClick(command)}>
+                                            {formattedCommands[command] || command.charAt(0).toUpperCase() + command.slice(1).toLowerCase()}
+                                        </button>
+                                        <span className={`tooltip-text ${buttonClass}`}>{commandDescriptions[command] || "No description available"}</span>
+                                    </div>
+                                ))}
+                            </div>
+                            <button type="submit" className={`main-search-button ${buttonClass}`}>Search with {currentEngine.name}</button>
+                        </form>
+                    </div>
                 );
-              })}
-            </div>
-            <form onSubmit={this.handleSubmit}>
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={this.handleSearchTermChange}
-                placeholder="Enter search term..."
-              />
-              <div className="dork-buttons">
-                {currentEngine.commands.map((command) => (
-                  <div className="dork-button-container" key={command}>
-                    <button
-                      type="button"
-                      className={`dork-button ${dorkCommand === command ? 'active' : ''}`}
-                      onClick={() => this.handleDorkButtonClick(command)}
-                    >
-                      {formattedCommands[command] || (command.charAt(0).toUpperCase() + command.slice(1).toLowerCase())}
-                    </button>
-                    <span className="tooltip-text">{commandDescriptions[command] || "No description available"}</span>
-                  </div>
-                ))}
-              </div>
-              <button type="submit" className="main-search-button">
-                Search with {currentEngine.name}
-              </button>
-            </form>
-          </div>
-        );
-      }
-    }
-    
-    ReactDOM.render(<DorkingTool />, document.getElementById('root'));
-  </script>
+            }
+        }
+
+        ReactDOM.render(<DorkingTool />, document.getElementById('root'));
+    </script>
+    <script>
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*()*&^%$#@!';
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = Array(columns).fill(1);
+
+        function draw() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#0F0';
+            ctx.font = `${fontSize}px arial`;
+
+            drops.forEach((drop, i) => {
+                const text = characters.charAt(Math.floor(Math.random() * characters.length));
+                ctx.fillText(text, i * fontSize, drop * fontSize);
+
+                if (drop * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+
+                drops[i]++;
+            });
+        }
+
+        setInterval(draw, 35);
+    </script>
 </body>
 </html>
